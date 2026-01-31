@@ -33,6 +33,7 @@ fun HomeScreen(
                     icon = {
                         Icon(
                             painterResource(R.drawable.add_icon),
+                            tint = MaterialTheme.colorScheme.primary,
                             contentDescription = "Add note"
                         )
                     },

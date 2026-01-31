@@ -8,6 +8,7 @@ import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -17,6 +18,7 @@ import com.google.firebase.analytics.analytics
 import io.github.shane.thomas.noted.ui.screens.EditorScreen
 import io.github.shane.thomas.noted.ui.screens.HomeScreen
 import io.github.shane.thomas.noted.ui.theme.NotedTheme
+import io.github.shane.thomas.noted.ui.viewmodel.EditorViewModel
 
 class MainActivity : ComponentActivity() {
     private lateinit var analytics: FirebaseAnalytics
@@ -25,9 +27,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val viewModel: EditorViewModel = viewModel()
             NotedTheme {
 
-                SharedTransitionLayout() {
+                SharedTransitionLayout {
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
@@ -38,6 +41,7 @@ class MainActivity : ComponentActivity() {
                             HomeScreen(
                                 onFabClick = {
                                     navController.navigate("editor")
+                                    viewModel.updateText("")
                                 },
                                 this@SharedTransitionLayout,
                                 this@composable
@@ -47,11 +51,12 @@ class MainActivity : ComponentActivity() {
                         composable("editor") {
                             EditorScreen(
                                 onBackClick = {
-                                    navController.navigate("home"){
+                                    navController.navigate("home") {
                                         popUpTo("editor") { inclusive = true }
                                         launchSingleTop = true
                                     }
                                 },
+                                viewModel = viewModel,
                                 this@SharedTransitionLayout,
                                 this@composable
                             )
