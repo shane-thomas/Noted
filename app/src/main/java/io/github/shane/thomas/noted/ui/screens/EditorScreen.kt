@@ -42,7 +42,7 @@ fun EditorScreen(
 
     with(sharedTransitionScope) {
         Scaffold(
-            containerColor = MaterialTheme.colorScheme.background,
+            containerColor = MaterialTheme.colorScheme.surface,
             modifier = modifier
                 .fillMaxSize()
                 .sharedBounds(
@@ -79,8 +79,8 @@ fun EditorScreen(
                 BasicTextField(
                     value = textState.value,
                     onValueChange = { textState.value = it },
-                    textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground),
-                    cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
+                    textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface),
+                    cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurface),
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp)

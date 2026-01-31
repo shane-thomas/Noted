@@ -13,3 +13,12 @@
 .externalNativeBuild
 .cxx
 local.properties
+google-services.json
+
+
+# Android Studio generated files and folders
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+output.json

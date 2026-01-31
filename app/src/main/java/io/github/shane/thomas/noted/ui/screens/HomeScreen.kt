@@ -5,21 +5,19 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import io.github.shane.thomas.noted.R
 
-//@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun HomeScreen(
     onFabClick: () -> Unit,
@@ -27,11 +25,11 @@ fun HomeScreen(
     animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     Scaffold(
-        contentWindowInsets = WindowInsets(bottom = 0.dp),
         floatingActionButton = {
             with(sharedTransitionScope) {
                 ExtendedFloatingActionButton(
                     text = { Text("Add note") },
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
                     icon = {
                         Icon(
                             painterResource(R.drawable.add_icon),
