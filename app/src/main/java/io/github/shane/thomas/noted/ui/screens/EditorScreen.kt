@@ -6,7 +6,9 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -37,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.shane.thomas.noted.R
 import io.github.shane.thomas.noted.ui.components.EditorToolbar
+import io.github.shane.thomas.noted.ui.theme.NotedTheme
 import io.github.shane.thomas.noted.ui.viewmodel.EditorViewModel
 
 @Composable
@@ -48,6 +51,7 @@ fun EditorScreen(
     modifier: Modifier = Modifier
 ) {
     val expanded = animatedVisibilityScope.transition.isRunning
+    val title by viewModel.title.collectAsState()
     val text by viewModel.text.collectAsState()
 
     with(sharedTransitionScope) {
@@ -61,35 +65,73 @@ fun EditorScreen(
                     resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds,
                     boundsTransform = { _, _ ->
                         tween(
-                            durationMillis = 300, easing = CubicBezierEasing(0.2f, 0f, 0f, 1f)
+                            durationMillis = 300,
+                            easing = CubicBezierEasing(0.2f, 0f, 0f, 1f)
                         )
-                    })
+                    }
+                )
                 .clip(
-                    RoundedCornerShape(
-                        if (expanded) 0.dp else 28.dp
-                    )
+                    RoundedCornerShape(if (expanded) 0.dp else 28.dp)
                 ),
-            topBar = { EditorTopBar(onBackClick = onBackClick) }) { innerPadding ->
-            Box(
+            topBar = { EditorTopBar(onBackClick = onBackClick) }
+        ) { innerPadding ->
+            EditorContent(
+                title = title,
+                text = text,
+                onTitleChange = viewModel::updateTitle,
+                onTextChange = viewModel::updateText,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-            ) {
-                BasicTextField(
-                    value = text,
-                    onValueChange = { viewModel.updateText(it) },
-                    textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface),
-                    cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurface),
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
-                )
-
-                EditorToolbar(modifier = Modifier.align(Alignment.BottomCenter))
-            }
+            )
         }
     }
 }
+
+@Composable
+fun EditorContent(
+    title: String,
+    text: String,
+    onTitleChange: (String) -> Unit,
+    onTextChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            BasicTextField(
+                value = title,
+                onValueChange = onTitleChange,
+                textStyle = MaterialTheme.typography.headlineMedium.copy(
+                    color = MaterialTheme.colorScheme.onSurface
+                ),
+                cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp)
+            )
+
+            // Body
+            BasicTextField(
+                value = text,
+                onValueChange = onTextChange,
+                textStyle = MaterialTheme.typography.bodyLarge.copy(
+                    color = MaterialTheme.colorScheme.onSurface
+                ),
+                cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurface),
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
+        EditorToolbar(
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
+    }
+}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -133,6 +175,20 @@ fun EditorTopBar(
 @Preview
 @Composable
 private fun EditorTopBarPrev() {
-    EditorTopBar { }
+    EditorTopBar(
+        onBackClick = {  }
+    )
+}
 
+@Preview(showBackground = true)
+@Composable
+private fun EditorContentPreview() {
+    NotedTheme {
+        EditorContent(
+            text = "Preview text\nWrite anything here…",
+            onTextChange = {},
+            title = "Title test",
+            onTitleChange = {},
+        )
+    }
 }
