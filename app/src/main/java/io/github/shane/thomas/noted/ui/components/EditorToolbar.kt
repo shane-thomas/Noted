@@ -29,7 +29,7 @@ import io.github.shane.thomas.noted.R
 @Preview
 fun EditorToolbar(modifier: Modifier = Modifier) {
     val exitAlwaysScrollBehavior = FloatingToolbarDefaults.exitAlwaysScrollBehavior(Bottom)
-    var expanded by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(true) }
     HorizontalFloatingToolbar(
         expanded = expanded,
         colors = FloatingToolbarDefaults.vibrantFloatingToolbarColors(),
